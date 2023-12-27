@@ -15,6 +15,8 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use('/authors', authorsRoute);
 
 app.use('*', (req: Request, res: Response) => {
@@ -25,6 +27,7 @@ app.use('*', (req: Request, res: Response) => {
 });
 
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+    console.log(err);
     if (err instanceof EntityNotFoundError) {
         return ResponseUtil.sendError(
             res,
@@ -32,6 +35,10 @@ app.use((err: any, req: Request, res: Response, next: NextFunction) => {
             404,
             null
         );
+    }
+
+    if (err.message === 'Invalid file type') {
+        return ResponseUtil.sendError(res, 'Invalid file tpye', 422, null);
     }
     return res.status(500).send({
         success: false,

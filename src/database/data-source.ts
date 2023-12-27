@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv';
+import { query } from 'express';
 
 import { DataSource } from 'typeorm';
 import { Author } from '../entities/Author';
@@ -12,7 +13,7 @@ export const AppDataSource = new DataSource({
     username: process.env.DB_USERNAME || 'root',
     password: process.env.DB_PASSWORD || 'password',
     database: process.env.DB_DATABASE || 'db',
-    logging: true,
+    logging: ['query'],
     synchronize: false,
     entities: [Author],
     subscribers: [],
